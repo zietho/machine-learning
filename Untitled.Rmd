@@ -6,4 +6,7 @@ jupyter:
       format_name: rmarkdown
       format_version: '1.0'
       jupytext_version: 1.0.3
+
+
+      jupytext_formats: ipynb,Rmd:rmarkdown
 ---
