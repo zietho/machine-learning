@@ -13,9 +13,35 @@ jupyter:
 ---
 
 ```{python}
-for i in range(0,20):
-    print(i)
+import pandas as pd
+import matplotlib as plt
+import numpy as np
 ```
+
+# Data Set 1: sentiment140
+
+Abstract: This is the sentiment140 dataset. It contains 1,600,000 tweets extracted using the twitter api . The tweets have been annotated (0 = negative, 4 = positive) and they can be used to detect sentiment. <sup>1</sup>
+
+<sup>1</sup> https://www.kaggle.com/kazanova/sentiment140
+
+```{python}
+urls = 'datasets/training.1600000.processed.noemoticon.csv'
+
+df = pd.read_csv(url,encoding='latin-1')
+
+df.head()
+df.shape
+```
+
+```{python}
+df.head()
+```
+
+# Data Set 1: OPPORTUNITY Activity Recognition Dataset
+
+Abstract: "The OPPORTUNITY Dataset for Human Activity Recognition from Wearable, Object, and Ambient Sensors is a dataset devised to benchmark human activity recognition algorithms (classification, automatic data segmentation, sensor fusion, feature extraction, etc). <sup>1</sup>
+
+<sup>1</sup> https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#
 
 ```{python}
 
