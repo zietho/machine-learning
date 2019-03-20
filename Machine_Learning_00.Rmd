@@ -1,0 +1,154 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.0'
+      jupytext_version: 1.0.3
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+<a href="https://colab.research.google.com/github/zietho/machine-learning/blob/master/Machine_Learning_00.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+```{python id=ALaX-9cbFa-K, colab_type=code, colab={}}
+import pandas as pd
+import matplotlib as plt
+import numpy as np
+import re
+```
+
+# Data Set 1: sentiment140
+
+Abstract: This is the sentiment140 dataset. It contains 1,600,000 tweets extracted using the twitter api . The tweets have been annotated (0 = negative, 4 = positive) and they can be used to detect sentiment. <sup>1</sup>
+
+<sup>1</sup> https://www.kaggle.com/kazanova/sentiment140
+
+```{python id=-St4Z2iNg3ir, colab_type=code, colab={}}
+df_sentiment = pd.read_csv('datasets/sentiment/training.1600000.processed.noemoticon.csv', encoding='latin_1', header=None)
+```
+
+```{python id=rAcHwU4_lCqL, colab_type=code, outputId=29f41390-11df-45c5-82e7-aa66ea08313b, colab={'base_uri': 'https://localhost:8080/', 'height': 111}}
+df_sentiment.head(2)
+```
+
+```{python id=6nrVVcP_gDkR, colab_type=code, outputId=fbb15579-4594-45c3-d835-ec6c5e514ffe, colab={'base_uri': 'https://localhost:8080/', 'height': 1524}}
+def preprocess(df):
+
+    '''
+    weekday extraction 1min
+    '''
+    def funcapply(x):
+        return x[0:3]
+
+    df['weekday'] = df['date'].apply(lambda x: funcapply(x))
+
+    '''
+    parse time to pandas datetime takes 5 minutes
+    from datetime import datetime
+    d = datetime.strptime('Thu Apr 23 13:38:19 +0000 2009','%a %b %d %H:%M:%S %z %Y').strftime('%Y-%m-%d %H:%M:%S');
+    '''
+    df['date'] = pd.to_datetime(df['date'])
+    
+    return df
+  
+df_sentiment = preprocess(df_sentiment)
+```
+
+```{python id=MjRT_a_V7oLM, colab_type=code, outputId=80d7b0f8-e64f-4813-8c09-2eb6e5d78bc0, colab={'base_uri': 'https://localhost:8080/', 'height': 34}}
+df_sentiment.shape
+```
+
+```{python id=5LbQN5fn7q2f, colab_type=code, outputId=3a7a57f5-aa90-45ae-a896-a77b355e19b4, colab={'base_uri': 'https://localhost:8080/', 'height': 359}}
+df_sentiment.head(10)
+```
+
+```{python id=cO0iGmWa8Cxt, colab_type=code, colab={}}
+df_sentiment.columns = ['label', 'id', 'timestamp', 'query_type', 'username', 'sentiment']
+```
+
+```{python id=JmYSAX727ugl, colab_type=code, outputId=94e9aa41-13ea-4102-db0f-dd31c122b8a4, colab={'base_uri': 'https://localhost:8080/', 'height': 68}}
+df_sentiment['label'].value_counts()
+```
+
+```{python id=GgzCUoEx8S5R, colab_type=code, outputId=f1cd71ed-baf1-4eb9-bce9-52c3630a8c98, colab={'base_uri': 'https://localhost:8080/', 'height': 51}}
+df_sentiment['query_type'].value_counts()
+```
+
+# Data Set 1: OPPORTUNITY Activity Recognition Dataset
+
+Abstract: "The OPPORTUNITY Dataset for Human Activity Recognition from Wearable, Object, and Ambient Sensors is a dataset devised to benchmark human activity recognition algorithms (classification, automatic data segmentation, sensor fusion, feature extraction, etc). <sup>1</sup>
+
+<sup>1</sup> https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#
+
+
+# activity of daily living (ADL)
+Read in activity of daily living (ADL) for all users
+
+```{python id=FUoaE5eIXrTd, colab_type=code, outputId=45a93522-3153-4e11-de37-e2d5f7a99ea8, colab={'base_uri': 'https://localhost:8080/', 'height': 8704}}
+# read in column names
+opportunity_cols = dict()
+opportunity_cols_txt = open("datasets/opportunity/column_names.txt", "r")
+
+for line in opportunity_cols_txt:
+
+    if re.search('Column',line) != None:
+        col_id = re.search('Column: (\S*) ',line).group(1)
+        opportunity_cols[col_id] = dict()
+        opportunity_cols[col_id]['name'] = re.search('Column: \S* (\S*)',line).group(1)
+
+        if re.search('Column: \S* \S* \S*',line) != None:
+            opportunity_cols[col_id]['sensor'] = re.search('Column: \S* \S* (\S*)',line).group(1)
+            opportunity_cols[col_id]['sensor_axis'] = re.search(' (\S*);',line).group(1)
+            opportunity_cols[col_id]['value_type'] = re.search('value = (.*),',line).group(1)
+            opportunity_cols[col_id]['unit'] = re.search('unit =(.*)$',line).group(1)
+            
+opportunity_cols
+```
+
+```{python}
+col_names = list()
+for key, column in opportunity_cols.items():
+    col_names.append(key+"_"+column.get('name'))
+col_names.insert(0,'0_User')
+col_names
+```
+
+```{python id=oqO1Zom-S0Qs, colab_type=code, outputId=71f8505a-ca31-4b7a-fb03-1c2880a8a280, colab={'base_uri': 'https://localhost:8080/', 'height': 71}}
+adl_filename_mask = 'S{}-ADL{}.dat'
+drill_filename_mask = 'S{}-Drill.dat'
+df_opportunity_adl = pd.DataFrame()
+df_opportunity_drill = pd.DataFrame()
+
+for user_idx in range(1,5):
+    for run in range (1,6):
+        path = 'datasets/opportunity/'+adl_filename_mask.format(user_idx, run)
+        df_partial_adl = pd.read_csv(path, header=None, sep='\s')
+        df_partial_adl.insert(0,'User',user_idx)
+        df_opportunity_adl = df_opportunity_adl.append(df_partial_adl) 
+    
+    path = 'datasets/opportunity/'+adl_filename_mask.format(user_idx, run)
+    df_partial_drill = pd.read_csv(path, header=None, sep='\s')
+    df_partial_drill.insert(0,'User',user_idx)
+    df_opportunity_drill = df_opportunity_drill.append(df_partial_adl)
+
+print(df_opportunity_adl.shape)
+
+#df_adl = pd.read_csv('drive/My Drive/University/Data Science/Machine Learning/datasets/opportunity/S1-ADL1.dat', encoding='latin_1', header=None, sep='\s')
+```
+
+```{python id=OoiEAWOMXp3E, colab_type=code, colab={}}
+df_opportunity_adl.columns = col_names
+#df_opportunity_drill.shape
+```
+
+```{python id=KIXW9NALTHHf, colab_type=code, outputId=5bee476f-9eb9-4c0d-a859-97a1e8e75814, colab={'base_uri': 'https://localhost:8080/', 'height': 388}}
+df_adl.head(10)
+```
+
+```{python id=DXWlm6e7TI_s, colab_type=code, colab={}}
+
+```
