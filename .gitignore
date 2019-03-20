@@ -1,2 +1,2 @@
 *.ipynb_checkpoints/
-datasets/training.1600000.processed.noemoticon.csv
+datasets/sentiment/training.1600000.processed.noemoticon.csv
