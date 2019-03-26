@@ -14,6 +14,7 @@ jupyter:
     name: python3
 ---
 
+```{python}
 import pandas as pd
 import numpy as np
 import os as os
