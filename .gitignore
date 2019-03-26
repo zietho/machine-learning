@@ -4,3 +4,4 @@ datasets/opportunity/*
 datasets/sentiment/*
 *.pdf
 *.ipynb
+handins/*

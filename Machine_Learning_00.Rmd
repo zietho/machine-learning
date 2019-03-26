@@ -14,7 +14,6 @@ jupyter:
 ---
 
 ```{python}
-# @hidden_cell
 # %autosave 0
 ```
 
@@ -28,8 +27,7 @@ import re
 import nltk
 ```
 
-
-## Machine Learning  184.702  SS 2019 
+# Assignment 1 - Machine Learning  184.702  SS 2019 
 ### 26.03.2019 Group06
 
 
@@ -37,27 +35,25 @@ import nltk
 |------|---------|
 |   Josef Weber  | 01363254|
 |Ziegelbecker Thomas | 0925321|
-|Pintaric Thomas 1111111|
+|Pintaric Thomas | 1111111|
 
 
 
-# Data Set 1: Twitter sentiment140
+## Data Set 1: Twitter sentiment140
 
-Abstract: This is the sentiment140 dataset. It contains 1,600,000 tweets extracted using the twitter api . The tweets have been annotated (0 = negative, 4 = positive) and they can be used to detect sentiment. <sup>1</sup>
+### Explanation
+This is the sentiment140 dataset. It contains extracted tweets using the twitter api. The tweets have been annotated and can be used to detect sentiment. <sup>1</sup>
+We chose this dataset because we are interested in doing text analysis and since this dataset has a very limited amount of features, while having lots of samples. 
 
 Dataset Source <sup>1</sup> [twitter dataset](https://www.kaggle.com/kazanova/sentiment140) 
 
+### Characteristics
 
-## Explanation
-Since we were interested in doing text analysis in particular sentiment analysis and since this dataset has a very limited amount of features, while having lots of samples we dediced to take this data set. 
-
-## Characteristics
-
-### How many samples: 
+#### How many samples: 
 
 Dataset has 1.600.000 tweets (samples) and 9 columns, one of them being the feature.
 
-### How many attributes (features): 
+#### How many attributes (features): 
 
 The aim is to extract features by taking the tweet text from each datapoint and splitting the single whole text into words to classify them, weather they have positive or negative meaning. Using dictionaries that contain words which represent specific emotions we decide if a tweet is positive, negative or neutral. 
 <br>
@@ -67,9 +63,7 @@ So far we cleaned the tweets by applying some regex to handle URL's, references 
 
 Based on the method, tool and dictionary that we will use in the future we will end up having a fairly large amount of columns (features) each representing the quantity of a word that is contained in each tweet. If the positive amount of words will dominate then the tweet will be labeled with a positive sentiment.
 
-
 ### Which data types:
-
 
 * target: the polarity of the tweet (0 = negative, 2 = neutral, 4 = positive) [dtype = int64]
     * nominal
@@ -254,59 +248,43 @@ plt.ylabel("count")
 plt.show()
 ```
 
-# Data Set 2: OPPORTUNITY Activity Recognition Dataset
+## Data Set 2: OPPORTUNITY Activity Recognition Dataset
 
-Abstract: "The OPPORTUNITY Dataset for Human Activity Recognition from Wearable, Object, and Ambient Sensors is a dataset devised to benchmark human activity recognition algorithms (classification, automatic data segmentation, sensor fusion, feature extraction, etc). <sup>1</sup>
+### Explanation
+"The OPPORTUNITY Dataset for Human Activity Recognition from Wearable, Object, and Ambient Sensors is a dataset devised to benchmark human activity recognition algorithms (classification, automatic data segmentation, sensor fusion, feature extraction, etc). <sup>1</sup>
+We chose this dataset for its high dimensionality, for its different nature (sensor data vs. textual data) and because it's interesting to work with sensor data.
 
+Dataset Source <sup>1</sup> [twitter dataset](https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#) 
 
-Dataset Source <sup>1</sup> [OPPORTUNITY Activity Recognition Dataset](https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#) 
+### Characteristics
 
-
-## Explanation
-
-We chose this dataset since for its high dimensionality and because it's interesting for us to work with sensor data from wearable devices. Additionally, it is very different from the first data set less samples per user per run while having many features. 
-
-## Characteristics
-
-### How many samples:
+#### How many samples:
 
 Notes regarding the recordings of the dataset:
-* 4 users, 
-* 6 runs per users. 
-* Of these, 5 are **Activity of Daily Living (644.635 samples)** runs characterized by a natural execution of daily activities, where samples per user break down the following way:
-    * 1    179.695 samples
-    * 2    171.785 samples
-    * 4    147.214 samples
-    * 3    145.941 samples
+* 4 users each 6 runs,
+* of these5 are **Activity of Daily Living (644.635 samples)** runs characterized by a natural execution of daily activities, where samples per user break down the following way:
 * The 6th run is a **"drill" (118.975 samples)** run, where users execute a scripted sequence of activities. Samples per user break down the following way:
-    * 2    318.26 samples
-    * 4    305.27 samples
-    * 1    301.27 samples
-    * 3    264.95 samples
 
-### How many attributes (features):
+#### How many attributes (features):
 
 The dataset comprises the readings of motion sensors recorded while users executed typical daily activities.The attributes correspond to raw sensor readings. There is a total of 242 attributes (all of type float). 
 
-* **Body-worn sensors (145 attributes):** The body-worn sensors include 7 inertial measurement units and 12 3D acceleration sensors.The inertial measurement units provide readings of: 3D acceleration, 3D rate of turn, 3D magnetic field, and orientation of the sensor with respect to a world coordinate system in quaternions. Five sensors are on the upper body and two are mounted on the user's shoes. The acceleration sensors provide 3D acceleration. They are mounted on the upper body, hip and leg. Four tags for an ultra-wideband localization system are placed on the left/right front/back side of the shoulder. 
+* **Body-worn sensors (145 attributes):** The body-worn sensors include 7 inertial measurement units and 12 3D acceleration sensors.The inertial measurement units provide readings of: 3D acceleration, 3D rate of turn, 3D magnetic field, and orientation of the sensor with respect to a world coordinate system in quaternions.
 
-* **Object sensors (60 attributes):** 12 objects are instrumented with wireless sensors measuring 3D acceleration and 2D rate of turn. This allows to detect which objects are used, and possibly also the kind of usage that is made of them. 
+* **Object sensors (60 attributes):** 12 objects are instrumented with wireless sensors measuring 3D acceleration and 2D rate of turn.
 
-* **Ambient sensors (37 attributes):** Ambient sensors include 13 switches and 8 3D acceleration sensors in drawers, kitchen appliances and doors. The reed switches are placed in triplets on the fridge, dishwasher and drawer 2 and drawer 3. They may be used to detect three states of the furniture element: closed, half open, and fully open. The acceleration sensors may allow to assess if an element of furniture is used, and whether it may be opened or closed.
+* **Ambient sensors (37 attributes):** Ambient sensors include 13 switches and 8 3D acceleration sensors in drawers, kitchen appliances and doors. 
 
-### What types of attributes (nominal, ordinal, interval, ...):
-
-
+#### What types of attributes (nominal, ordinal, interval, ...):
 Columns:
-* 1 - duration - milli seconds **(ratio)** 
+* 1 - milliseconds - duration **(ratio)** 
 * 2-37 - Accelerometers with the unit: milli g **(interval)** 
 * 38-134 - InertialMeasurementUnit withe the unit millig g and mm/s **(interval and ratio)**
-* 135-194 - Accelerometers - milli g (interval)
+* 135-194 - Accelerometers - milli g **(interval)**
 * 195 - 207 - Logical binary values - on/off 0/1 **(nominal)**
 * 208-231 - Accelerometer - milli g **(interval)**
 * 232 - 242 - LOCATION - millimeters **(ratio)**
 * 243-250 - Legend one-hot-encoded locomotion information - yes/no **(nominal)**
-
 
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 8704}, colab_type=code, id=FUoaE5eIXrTd, outputId=45a93522-3153-4e11-de37-e2d5f7a99ea8}
 # build the data dictionary
@@ -356,7 +334,7 @@ for user_idx in range(1,5):
     df_partial_drill.insert(0,'User',user_idx)
     df_opportunity_drill = df_opportunity_drill.append(df_partial_adl)
 
-print(df_opportunity_adl.shape)
+#print(df_opportunity_adl.shape)
 
 #df_adl = pd.read_csv('drive/My Drive/University/Data Science/Machine Learning/datasets/opportunity/S1-ADL1.dat', encoding='latin_1', header=None, sep='\s')
 ```
@@ -374,8 +352,8 @@ print(df_opportunity_adl.shape)
 df_opportunity_adl = pd.read_csv('datasets/opportunity/opportunity_adl.csv')
 df_opportunity_drill = pd.read_csv('datasets/opportunity/opportunity_drill.csv')
 
-print(df_opportunity_adl.shape)
-print(df_opportunity_drill.shape)
+#print(df_opportunity_adl.shape)
+#print(df_opportunity_drill.shape)
 ```
 
 ```{python}
@@ -393,13 +371,129 @@ print(df_opportunity_drill['0_User'].value_counts())
 ```
 
 ```{python}
-df_opportunity_adl.describe()
-```
-
-```{python}
 df_opportunity_adl.dtypes.value_counts()
 ```
 
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 388}, colab_type=code, id=KIXW9NALTHHf, outputId=5bee476f-9eb9-4c0d-a859-97a1e8e75814}
 df_opportunity_adl.head(10)
 ```
+
+```{python}
+df_opportunity_adl.describe()
+```
+
+### Distributions 
+
+#### Missing values: 
+* e.g. by looking at data distributions and percentiles which showed that certain columns (particularly the legend columns at the end) do have certain percentiles or quantiles with 0.0 meaning that there are no occurences which are a hint for missing values in the first place
+* another approach is by using isnull() per column and sum per axis = 0 (columns) using pandas
+
+which shows that a few Accelerometer columsn have a higher number of missing values ranging between 9 and 40%:
+* 16_Accelerometer               21.553592
+* 14_Accelerometer               21.553592
+* 15_Accelerometer               21.553592
+* 37_Accelerometer               44.244262
+* 35_Accelerometer               44.244262
+* 36_Accelerometer               44.244262
+
+```{python}
+df_opportunity_adl['248_LL_Right_Arm'].describe()
+```
+
+```{python}
+missing_values_per_column = df_opportunity_adl.isnull().sum(axis=0)
+x_columns = list(missing_values_per_column) 
+label_columns = list(missing_values_per_column.keys())
+plt.hist(x_columns, 50,label=label_columns)
+```
+
+```{python}
+mask = missing_values_per_column > 0
+num_of_rows = df_opportunity_adl.shape[0]
+missing_per_column = (missing_values_per_column[mask]/num_of_rows) * 100
+missing_per_column.sort_values(inplace=True)
+missing_per_column
+```
+
+```{python}
+df_cleaned_opportunity_adl = df_opportunity_adl.copy().fillna(0)
+```
+
+```{python}
+#print(opportunity_cols.get('240'))
+```
+
+#### A few representative distributions of the different sensor types
+
+```{python}
+plt.figure(1)
+#plt.figure(figsize=(15, 10))
+
+plt.subplot(221)
+plt.hist(df_cleaned_opportunity_adl['2_Accelerometer'], bins=400)
+plt.title("distribution of accelerometer 1")
+plt.xlabel("millig g")
+plt.ylabel("count")
+
+plt.subplot(222)
+green_diamond = dict(markerfacecolor='b', marker='D')
+plt.boxplot(df_cleaned_opportunity_adl['2_Accelerometer'], flierprops=green_diamond) 
+plt.title("distribution of accelerometer 1 [boxplot]")
+plt.ylabel("milli g")
+
+###
+
+plt.subplot(223)
+plt.hist(df_cleaned_opportunity_adl['195_REED'])
+plt.title("distribution of 195_REED")
+plt.xlabel("logical (on/off)")
+plt.ylabel("count")
+
+plt.subplot(224)
+plt.boxplot(df_cleaned_opportunity_adl['195_REED'], flierprops=green_diamond) 
+plt.title("distribution of 195_REED [boxplot]")
+plt.ylabel("logical (on/off)")
+
+plt.show()
+```
+
+```{python}
+plt.figure(2)
+#plt.figure(figsize=(15, 10))
+
+plt.subplot(221)
+plt.hist(df_cleaned_opportunity_adl['125_InertialMeasurementUnit'], bins=400)
+plt.title("distribution of 125_InertialMeasurementUnit")
+plt.xlabel("milli g")
+plt.ylabel("count")
+
+plt.subplot(222)
+green_diamond = dict(markerfacecolor='b', marker='D')
+plt.boxplot(df_cleaned_opportunity_adl['125_InertialMeasurementUnit'], flierprops=green_diamond) 
+plt.title("distribution of 125_InertialMeasurementUnit [boxplot]")
+plt.ylabel("millig g")
+
+plt.show()
+```
+
+```{python}
+plt.figure(2)
+#plt.figure(figsize=(15, 10))
+
+plt.subplot(221)
+plt.hist(df_cleaned_opportunity_adl['240_LOCATION'], bins=400)
+plt.title("distribution of 240_LOCATION")
+plt.xlabel("location mm")
+plt.ylabel("count")
+
+plt.subplot(222)
+green_diamond = dict(markerfacecolor='b', marker='D')
+plt.boxplot(df_cleaned_opportunity_adl['240_LOCATION'], flierprops=green_diamond) 
+plt.title("distribution of 240_LOCATION [boxplot]")
+plt.ylabel("location mm")
+
+plt.show()
+```
+
+* One can clearly see that as state in the description of the data that the quality of measurement regarding the accelerometer measurements are of good quality, while others such as the reed sensors only vaguely captured observations
+* the different columns that were checked, irrespective of its type, seem to be normal distributed
