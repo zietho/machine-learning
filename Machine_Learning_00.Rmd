@@ -292,4 +292,33 @@ df_opportunity_adl.columns = col_names
 df_opportunity_adl.head(10)
 ```
 
+<<<<<<< HEAD
+```{python colab={}, colab_type=code, id=DXWlm6e7TI_s}
+dataset_path = 'datasets/opportunity/opportunity_drill.csv'
+df_clean = pd.read_csv(dataset_path, encoding='utf-8', header=0)
+df_clean.head()
+```
+
+```{python}
+dataset_path = 'datasets/opportunity/opportunity_adl.csv'
+df_clean = pd.read_csv(dataset_path, encoding='utf-8', header=0)
+df_clean.head()
+```
+
+```{python}
+df_clean.dtypes
+```
+
+```{python}
+
+```
+=======
 ## Ich bin ein hübsches Markdown
+>>>>>>> 1e1c5ab5095778231f63dcfebe32782c9c305a3a
+
+
+# *abc*
+
+```{python}
+
+```
