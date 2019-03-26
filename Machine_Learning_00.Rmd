@@ -28,6 +28,19 @@ import re
 import nltk
 ```
 
+
+## Machine Learning  184.702  SS 2019 
+### 26.03.2019 Group06
+
+
+| Name | Matrnr. |
+|------|---------|
+|   Josef Weber  | 01363254|
+|Ziegelbecker Thomas | 0925321|
+|Pintaric Thomas 1111111|
+
+
+
 # Data Set 1: Twitter sentiment140
 
 Abstract: This is the sentiment140 dataset. It contains 1,600,000 tweets extracted using the twitter api . The tweets have been annotated (0 = negative, 4 = positive) and they can be used to detect sentiment. <sup>1</sup>
@@ -246,7 +259,7 @@ plt.show()
 Abstract: "The OPPORTUNITY Dataset for Human Activity Recognition from Wearable, Object, and Ambient Sensors is a dataset devised to benchmark human activity recognition algorithms (classification, automatic data segmentation, sensor fusion, feature extraction, etc). <sup>1</sup>
 
 
-Dataset Source <sup>1</sup> [twitter dataset](https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#) 
+Dataset Source <sup>1</sup> [OPPORTUNITY Activity Recognition Dataset](https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#) 
 
 
 ## Explanation
