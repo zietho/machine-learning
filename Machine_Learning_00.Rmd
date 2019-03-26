@@ -14,13 +14,6 @@ jupyter:
     name: python3
 ---
 
-<<<<<<< HEAD
-```{python id=ALaX-9cbFa-K, colab_type=code, colab={}}
-=======
-<a href="https://colab.research.google.com/github/zietho/machine-learning/blob/master/Machine_Learning_00.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
-
-```{python colab={}, colab_type=code, id=ALaX-9cbFa-K}
->>>>>>> 8bc25fe89039fc9c96e91309b9053439dcb63892
 import pandas as pd
 import numpy as np
 import os as os
