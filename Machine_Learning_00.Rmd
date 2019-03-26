@@ -28,52 +28,66 @@ import re
 import nltk
 ```
 
+# ///////////////////////////////////////////////////////
 Form for report:
 
-# Explanation
+### Explanation
 Explanation of choice for data sets
 
-# Characteristics
+### Characteristics
 
 * How many samples
 * How many attributes (features)
 * What types of attributes (nominal, ordinal, interval, ...)
 * Distribution/histograms of values in the attributes
 
+# ///////////////////////////////////////////////////////
 
-# Data Set 1: sentiment140
+
+# Data Set 1: Twitter sentiment140
 
 Abstract: This is the sentiment140 dataset. It contains 1,600,000 tweets extracted using the twitter api . The tweets have been annotated (0 = negative, 4 = positive) and they can be used to detect sentiment. <sup>1</sup>
 
-<sup>1</sup> https://www.kaggle.com/kazanova/sentiment140
+Dataset Source <sup>1</sup> [twitter dataset](https://www.kaggle.com/kazanova/sentiment140) 
 
-Form for report:
+https://www.kaggle.com/kazanova/sentiment140
 
 ## Explanation
-Since we were interested in sentiment analysis and since this dataset has a very limited amount of features, while having lots of samples we dediced to take this data set
+Since we were interested in doing text analysis in particular sentiment analysis and since this dataset has a very limited amount of features, while having lots of samples we dediced to take this data set. 
 
 ## Characteristics
 
 ### How many samples: 
 
-1.600.000 tweets
+Dataset has 1.600.000 tweets (samples) and 9 columns, one of them being the feature.
+
+#### Short description of the dataset columns
+* target: the polarity of the tweet (0 = negative, 2 = neutral, 4 = positive) [dtype = int64]
+* ids: The id of the tweet (2087) [dtype = int64]
+* date: the date of the tweet (Sat May 16 23:58:44 UTC 2009) [dtype = datetime]
+* flag: The query (lyx). If there is no query, then this value is NO_QUERY. [dtype = object]
+* user: the user that tweeted (max) [dtype = object]
+* text: the text of the tweet (this is a sample tweet) [dtype = object]
 
 ### How many attributes (features): 
-* target: the polarity of the tweet (0 = negative, 2 = neutral, 4 = positive)
-* ids: The id of the tweet ( 2087)
-* date: the date of the tweet (Sat May 16 23:58:44 UTC 2009)
-* flag: The query (lyx). If there is no query, then this value is NO_QUERY.
-* user: the user that tweeted (robotickilldozr)
-* text: the text of the tweet (Lyx is cool)
+
+The aim is to extract features by taking the tweet text from each datapoint and splitting the single whole text into words to classify them, weather they have positive or negative meaning. Using dictionaries that contain words which represent specific emotions we decide if a tweet is positive, negative or neutral. 
+<br>
+
+So far we cleaned the tweets by applying some regex to handle URL's, references to other twitter-users, additional whitespace, turning the text into lowercase and more to prepare for further analysis.
+<br>
+
+Based on the method, tool and dictionary that we will use in the future we will end up having a fairly large amount of columns (features) each representing the quantity of a word that is contained in each tweet. If the positive amount of words will dominate then the tweet will be labeled with a positive sentiment.
+
 
 ### What types of attributes (nominal, ordinal, interval, ...) > put next to the respective attribute
 
-* target: nominal.. 
-* ids: The id of the tweet ( 2087)
-* date: the date of the tweet (Sat May 16 23:58:44 UTC 2009)
-* flag: The query (lyx). If there is no query, then this value is NO_QUERY.
-* user: the user that tweeted (robotickilldozr)
-* text: the text of the tweet (Lyx is cool)
+* target: nominal 
+* ids: nominal
+* date: nominal
+* flag: nominal
+* user: nominal
+* text: nominal
 
 
 ## Distribution/histograms of values in the attributes
@@ -87,7 +101,7 @@ dataset_path = 'datasets/sentiment/part-1-training.1600000.processed.noemoticon.
 DATASET_COLUMNS = ["target", "ids", "date", "flag", "user", "text"]
 
 df_raw = pd.read_csv(dataset_path, encoding ='latin_1' , names=DATASET_COLUMNS)
-df_raw.head()
+#df_raw.head()
 ```
 
 ### Preprocess: extract day from date to sep col
@@ -162,7 +176,7 @@ df_clean.head()
 ## Column Data Types 
 
 ```{python}
-df_clean.dtypes
+print(df_clean.dtypes)
 ```
 
 ## Shape and Size
@@ -172,6 +186,8 @@ print("Dataset has ", df_clean.shape[0], "rows and ", df_clean.shape[1], "column
 ```
 
 ## Sentiment Distribution
+
+The plot below shows clearly that half of the datasets tweets are labeled positive and half negative.
 
 ```{python}
 # @hidden_cell
@@ -183,29 +199,35 @@ target_cnt.SENTIMENT = target_cnt.SENTIMENT.map({4:'pos', 2:'neu', 0:'neg'})
 
 plt.figure(figsize=(10,5))
 plt.bar(target_cnt.SENTIMENT, target_cnt.COUNT)
-plt.title("Sentiment label distribuition")
-
-target_cnt
+plt.title("distribution of sentiment labels")
+plt.xlabel("sentiment")
+plt.ylabel("count")
+plt.show()
 ```
 
-## Distribution by days
+## Distribution of tweets by days & Distribution of tweets by Weekdays
+
+To show how the tweets are distributed according to their appearence in time we visualized tweets by the days of the month and of the week. Therefore we had to seperate the twitter timestamp into two different columns to be comfortable to process.
 
 ```{python}
 g = df_clean.groupby(by=df_clean.date.dt.day).agg('count')
 
 df_time_plot = pd.DataFrame({"day":g.index, "count":g.ids})
 
-plt.rcParams["figure.figsize"] = (20,10)
+plt.rcParams["figure.figsize"] = (18,6)
 ax = df_time_plot.plot.bar(x='day', y='count', rot=0)
-```
 
-## Distribution by Weekdays
+plt.xlabel("monthday")
+plt.ylabel("count")
+plt.title("Distribution of tweets per Month days")
+plt.show()
+```
 
 ```{python}
 g = df_clean.groupby(by=df_clean.weekday).agg('count')
 
 df_weekday_plot = pd.DataFrame({"day":g.index, "count":g.ids})
-# sort categorical
+
 cats = ['Mon','Tue','Wed','Thu','Fri','Sat', 'Sun']
 df_weekday_plot.day = pd.Categorical(df_weekday_plot.day, 
                       categories=cats,
@@ -213,41 +235,51 @@ df_weekday_plot.day = pd.Categorical(df_weekday_plot.day,
 df_weekday_plot.sort_values('day', inplace=True)
 df_weekday_plot
 
-
-plt.rcParams["figure.figsize"] = (15,8)
+plt.rcParams["figure.figsize"] = (18,6)
 ax = df_weekday_plot.plot.bar(x='day', y='count', rot=0)
+
+plt.xlabel("weekday")
+plt.ylabel("count")
+plt.title("Distribution of tweets per Week days")
+plt.show()
 ```
 
-## distribution of text string length
+## Distribution of text string length & text wordcount
+
+Beside having the text as a feature vector we derived the wordcount as well as the tweet-string-length as another potential feature from the text column. It is also very handy to briefly introcude and visualize the text column. The two plots below show the how the **wordcount per tweet** and the **tweet-string-length** per tweet are distributed across the dataset. To further visualize the few outliers we introduced the box plot diagram at the right.
 
 ```{python}
-plt.figure(figsize=(15,7))
+plt.figure(1)
+plt.figure(figsize=(18, 12))
+
+plt.subplot(221)
 plt.hist(df_clean.text_len, bins=400)
-plt.title("distribution of string length")
+plt.title("distribution of tweet-string-length")
 plt.xlabel("length")
-plt.xlabel("count")
-plt.show()
+plt.ylabel("count")
 
-plt.figure(figsize=(15,7))
+plt.subplot(222)
 green_diamond = dict(markerfacecolor='b', marker='D')
-plt.boxplot(df_clean.text_len, flierprops=green_diamond) # plot pre_clean_len column
-plt.title("distribution of string length")
-plt.show()
-```
+plt.boxplot(df_clean.text_len, flierprops=green_diamond) 
+plt.title("distribution of tweet-string-length [boxplot]")
+plt.ylabel("count")
 
-## distribution of text wordcount
+###
 
-```{python}
-plt.figure(figsize=(15,7))
+plt.subplot(223)
 plt.hist(df_clean.text_wc, bins=300)
 plt.xlabel("length")
-plt.xlabel("count")
-plt.title("wordcount of string length")
-plt.show()
+plt.ylabel("count")
+plt.title("distribution of words per tweet (wordcount)")
 
-plt.figure(figsize=(15,7))
+plt.subplot(224)
 green_diamond = dict(markerfacecolor='b', marker='D')
-plt.boxplot(df_clean.text_wc, flierprops=green_diamond) # plot pre_clean_len column
+plt.boxplot(df_clean.text_wc, flierprops=green_diamond) 
+plt.title("distribution of words per tweet (wordcount) [boxplot]")
+plt.ylabel("count")
+
+
+fig.tight_layout()
 plt.show()
 ```
 
@@ -288,7 +320,7 @@ The dataset comprises the readings of motion sensors recorded while users execut
 
 * **Object sensors (60 attributes):** 12 objects are instrumented with wireless sensors measuring 3D acceleration and 2D rate of turn. This allows to detect which objects are used, and possibly also the kind of usage that is made of them. 
 
-* **Ambient sensors (37 attributes):** Ambient sensors include 13 switches and 8 3D acceleration sensors in drawers, kitchen appliances and doors. The reed switches are placed in triplets on the fridge, dishwasher and drawer 2 and drawer 3. They may be used to detect three states of the furniture element: closed, half open, and fully open. aThe acceleration sensors may allow to assess if an element of furniture is used, and whether it may be opened or closed.
+* **Ambient sensors (37 attributes):** Ambient sensors include 13 switches and 8 3D acceleration sensors in drawers, kitchen appliances and doors. The reed switches are placed in triplets on the fridge, dishwasher and drawer 2 and drawer 3. They may be used to detect three states of the furniture element: closed, half open, and fully open. The acceleration sensors may allow to assess if an element of furniture is used, and whether it may be opened or closed.
 
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 8704}, colab_type=code, id=FUoaE5eIXrTd, outputId=45a93522-3153-4e11-de37-e2d5f7a99ea8}
 # build the data dictionary
