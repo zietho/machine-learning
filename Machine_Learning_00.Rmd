@@ -80,7 +80,7 @@ So far we cleaned the tweets by applying some regex to handle URL's, references 
 Based on the method, tool and dictionary that we will use in the future we will end up having a fairly large amount of columns (features) each representing the quantity of a word that is contained in each tweet. If the positive amount of words will dominate then the tweet will be labeled with a positive sentiment.
 
 
-### What types of attributes (nominal, ordinal, interval, ...) > put next to the respective attribute
+### What types of attributes (nominal, ordinal, interval, ...):
 
 * target: nominal 
 * ids: nominal
@@ -283,7 +283,7 @@ fig.tight_layout()
 plt.show()
 ```
 
-# Data Set 1: OPPORTUNITY Activity Recognition Dataset
+# Data Set 2: OPPORTUNITY Activity Recognition Dataset
 
 Abstract: "The OPPORTUNITY Dataset for Human Activity Recognition from Wearable, Object, and Ambient Sensors is a dataset devised to benchmark human activity recognition algorithms (classification, automatic data segmentation, sensor fusion, feature extraction, etc). <sup>1</sup>
 
@@ -321,6 +321,20 @@ The dataset comprises the readings of motion sensors recorded while users execut
 * **Object sensors (60 attributes):** 12 objects are instrumented with wireless sensors measuring 3D acceleration and 2D rate of turn. This allows to detect which objects are used, and possibly also the kind of usage that is made of them. 
 
 * **Ambient sensors (37 attributes):** Ambient sensors include 13 switches and 8 3D acceleration sensors in drawers, kitchen appliances and doors. The reed switches are placed in triplets on the fridge, dishwasher and drawer 2 and drawer 3. They may be used to detect three states of the furniture element: closed, half open, and fully open. The acceleration sensors may allow to assess if an element of furniture is used, and whether it may be opened or closed.
+
+### What types of attributes (nominal, ordinal, interval, ...):
+
+
+Columns:
+* 1 - duration - milli seconds **(ratio)** 
+* 2-37 - Accelerometers with the unit: milli g **(interval)** 
+* 38-134 - InertialMeasurementUnit withe the unit millig g and mm/s **(interval and ratio)**
+* 135-194 - Accelerometers - milli g (interval)
+* 195 - 207 - Logical binary values - on/off 0/1 **(nominal)**
+* 208-231 - Accelerometer - milli g **(interval)**
+* 232 - 242 - LOCATION - millimeters **(ratio)**
+* 243-250 - Legend one-hot-encoded locomotion information - yes/no **(nominal)**
+
 
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 8704}, colab_type=code, id=FUoaE5eIXrTd, outputId=45a93522-3153-4e11-de37-e2d5f7a99ea8}
 # build the data dictionary
@@ -410,10 +424,6 @@ print(df_opportunity_drill['0_User'].value_counts())
 df_opportunity_adl.describe()
 ```
 
-```{python colab={}, colab_type=code, id=OoiEAWOMXp3E}
-df_opportunity_adl.columns = col_names
-```
-
 ```{python}
 df_opportunity_adl.dtypes.value_counts()
 ```
@@ -421,5 +431,3 @@ df_opportunity_adl.dtypes.value_counts()
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 388}, colab_type=code, id=KIXW9NALTHHf, outputId=5bee476f-9eb9-4c0d-a859-97a1e8e75814}
 df_opportunity_adl.head(10)
 ```
-
-## Ich bin ein hübsches Markdown
