@@ -14,6 +14,7 @@ jupyter:
 ---
 
 ```{python}
+# @hidden_cell
 # %autosave 0
 ```
 
@@ -27,11 +28,56 @@ import re
 import nltk
 ```
 
+Form for report:
+
+# Explanation
+Explanation of choice for data sets
+
+# Characteristics
+
+* How many samples
+* How many attributes (features)
+* What types of attributes (nominal, ordinal, interval, ...)
+* Distribution/histograms of values in the attributes
+
+
 # Data Set 1: sentiment140
 
 Abstract: This is the sentiment140 dataset. It contains 1,600,000 tweets extracted using the twitter api . The tweets have been annotated (0 = negative, 4 = positive) and they can be used to detect sentiment. <sup>1</sup>
 
 <sup>1</sup> https://www.kaggle.com/kazanova/sentiment140
+
+Form for report:
+
+## Explanation
+Since we were interested in sentiment analysis and since this dataset has a very limited amount of features, while having lots of samples we dediced to take this data set
+
+## Characteristics
+
+### How many samples: 
+
+1.600.000 tweets
+
+### How many attributes (features): 
+* target: the polarity of the tweet (0 = negative, 2 = neutral, 4 = positive)
+* ids: The id of the tweet ( 2087)
+* date: the date of the tweet (Sat May 16 23:58:44 UTC 2009)
+* flag: The query (lyx). If there is no query, then this value is NO_QUERY.
+* user: the user that tweeted (robotickilldozr)
+* text: the text of the tweet (Lyx is cool)
+
+### What types of attributes (nominal, ordinal, interval, ...) > put next to the respective attribute
+
+* target: nominal.. 
+* ids: The id of the tweet ( 2087)
+* date: the date of the tweet (Sat May 16 23:58:44 UTC 2009)
+* flag: The query (lyx). If there is no query, then this value is NO_QUERY.
+* user: the user that tweeted (robotickilldozr)
+* text: the text of the tweet (Lyx is cool)
+
+
+## Distribution/histograms of values in the attributes
+paste stuff from below
 
 
 ## Load raw sentiment140.csv
@@ -128,6 +174,7 @@ print("Dataset has ", df_clean.shape[0], "rows and ", df_clean.shape[1], "column
 ## Sentiment Distribution
 
 ```{python}
+# @hidden_cell
 target_cnt = df_clean.target.value_counts()
 target_cnt = target_cnt.to_frame()
 target_cnt.reset_index(inplace=True)
@@ -211,11 +258,40 @@ Abstract: "The OPPORTUNITY Dataset for Human Activity Recognition from Wearable,
 <sup>1</sup> https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#
 
 
-# activity of daily living (ADL)
-Read in activity of daily living (ADL) for all users
+## Explanation
+
+We chose this dataset since for its high dimensionality and because it's interesting for us to work with sensor data from wearable devices. Additionally, it is very different from the first data set less samples per user per run while having many features. 
+
+## Characteristics
+
+### How many samples:
+
+Notes regarding the recordings of the dataset:
+* 4 users, 
+* 6 runs per users. 
+* Of these, 5 are **Activity of Daily Living (644.635 samples)** runs characterized by a natural execution of daily activities, where samples per user break down the following way:
+    * 1    179.695 samples
+    * 2    171.785 samples
+    * 4    147.214 samples
+    * 3    145.941 samples
+* The 6th run is a **"drill" (118.975 samples)** run, where users execute a scripted sequence of activities. Samples per user break down the following way:
+    * 2    318.26 samples
+    * 4    305.27 samples
+    * 1    301.27 samples
+    * 3    264.95 samples
+
+### How many attributes (features):
+
+The dataset comprises the readings of motion sensors recorded while users executed typical daily activities.The attributes correspond to raw sensor readings. There is a total of 242 attributes (all of type float). 
+
+* **Body-worn sensors (145 attributes):** The body-worn sensors include 7 inertial measurement units and 12 3D acceleration sensors.The inertial measurement units provide readings of: 3D acceleration, 3D rate of turn, 3D magnetic field, and orientation of the sensor with respect to a world coordinate system in quaternions. Five sensors are on the upper body and two are mounted on the user's shoes. The acceleration sensors provide 3D acceleration. They are mounted on the upper body, hip and leg. Four tags for an ultra-wideband localization system are placed on the left/right front/back side of the shoulder. 
+
+* **Object sensors (60 attributes):** 12 objects are instrumented with wireless sensors measuring 3D acceleration and 2D rate of turn. This allows to detect which objects are used, and possibly also the kind of usage that is made of them. 
+
+* **Ambient sensors (37 attributes):** Ambient sensors include 13 switches and 8 3D acceleration sensors in drawers, kitchen appliances and doors. The reed switches are placed in triplets on the fridge, dishwasher and drawer 2 and drawer 3. They may be used to detect three states of the furniture element: closed, half open, and fully open. aThe acceleration sensors may allow to assess if an element of furniture is used, and whether it may be opened or closed.
 
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 8704}, colab_type=code, id=FUoaE5eIXrTd, outputId=45a93522-3153-4e11-de37-e2d5f7a99ea8}
-# read in column names
+# build the data dictionary
 opportunity_cols = dict()
 opportunity_cols_txt = open("datasets/opportunity/column_names.txt", "r")
 
@@ -230,12 +306,10 @@ for line in opportunity_cols_txt:
             opportunity_cols[col_id]['sensor'] = re.search('Column: \S* \S* (\S*)',line).group(1)
             opportunity_cols[col_id]['sensor_axis'] = re.search(' (\S*);',line).group(1)
             opportunity_cols[col_id]['value_type'] = re.search('value = (.*),',line).group(1)
-            opportunity_cols[col_id]['unit'] = re.search('unit =(.*)$',line).group(1)
-            
+            opportunity_cols[col_id]['unit'] = re.search('unit =(.*)$',line).group(1)     
 #opportunity_cols
-```
 
-```{python}
+# and generate the column names for the data frame
 col_names = list()
 for key, column in opportunity_cols.items():
     col_names.append(key+"_"+column.get('name'))
@@ -249,13 +323,16 @@ drill_filename_mask = 'S{}-Drill.dat'
 df_opportunity_adl = pd.DataFrame()
 df_opportunity_drill = pd.DataFrame()
 
+# go through the data fractions for the 4 users
 for user_idx in range(1,5):
+    # go through 5 adl runs and read in fractions
     for run in range (1,6):
         path = 'datasets/opportunity/'+adl_filename_mask.format(user_idx, run)
         df_partial_adl = pd.read_csv(path, header=None, sep='\s')
         df_partial_adl.insert(0,'User',user_idx)
         df_opportunity_adl = df_opportunity_adl.append(df_partial_adl) 
     
+    # also add the 6th "drill" run to the dataframe
     path = 'datasets/opportunity/'+adl_filename_mask.format(user_idx, run)
     df_partial_drill = pd.read_csv(path, header=None, sep='\s')
     df_partial_drill.insert(0,'User',user_idx)
@@ -267,58 +344,50 @@ print(df_opportunity_adl.shape)
 ```
 
 ```{python}
+# in order to not always do the read in of the fractions 
+
 #export_to_csv(df_opportunity_adl, "datasets/opportunity/opportunity_adl.csv")
 #export_to_csv(df_opportunity_drill, "datasets/opportunity/oppportunity_drill.csv")
 ```
 
 ```{python}
+# already read in from the prejoined fractions
+
 df_opportunity_adl = pd.read_csv('datasets/opportunity/opportunity_adl.csv')
 df_opportunity_drill = pd.read_csv('datasets/opportunity/opportunity_drill.csv')
+
+print(df_opportunity_adl.shape)
+print(df_opportunity_drill.shape)
 ```
 
 ```{python}
-df_opportunity_adl.shape
+# set column names according to data dictionary 
+df_opportunity_adl.columns = col_names
+df_opportunity_drill.columns = col_names
 ```
 
 ```{python}
-df_opportunity_adl.head(10)
+# get sample sizes for the two types of runs per user
+print("ADL:")
+print(df_opportunity_adl['0_User'].value_counts())
+print("\nDrill")
+print(df_opportunity_drill['0_User'].value_counts())
+```
+
+```{python}
+df_opportunity_adl.describe()
 ```
 
 ```{python colab={}, colab_type=code, id=OoiEAWOMXp3E}
 df_opportunity_adl.columns = col_names
 ```
 
+```{python}
+df_opportunity_adl.dtypes.value_counts()
+```
+
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 388}, colab_type=code, id=KIXW9NALTHHf, outputId=5bee476f-9eb9-4c0d-a859-97a1e8e75814}
 df_opportunity_adl.head(10)
 ```
 
-<<<<<<< HEAD
-```{python colab={}, colab_type=code, id=DXWlm6e7TI_s}
-dataset_path = 'datasets/opportunity/opportunity_drill.csv'
-df_clean = pd.read_csv(dataset_path, encoding='utf-8', header=0)
-df_clean.head()
-```
-
-```{python}
-dataset_path = 'datasets/opportunity/opportunity_adl.csv'
-df_clean = pd.read_csv(dataset_path, encoding='utf-8', header=0)
-df_clean.head()
-```
-
-```{python}
-df_clean.dtypes
-```
-
-```{python}
-
-```
-=======
 ## Ich bin ein hübsches Markdown
->>>>>>> 1e1c5ab5095778231f63dcfebe32782c9c305a3a
-
-
-# *abc*
-
-```{python}
-
-```

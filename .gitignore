@@ -2,4 +2,5 @@
 datasets/sentiment/training.1600000.processed.noemoticon.csv
 datasets/opportunity/*
 datasets/sentiment/*
+*.pdf
 *.ipynb
