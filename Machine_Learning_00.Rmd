@@ -28,29 +28,12 @@ import re
 import nltk
 ```
 
-# ///////////////////////////////////////////////////////
-Form for report:
-
-### Explanation
-Explanation of choice for data sets
-
-### Characteristics
-
-* How many samples
-* How many attributes (features)
-* What types of attributes (nominal, ordinal, interval, ...)
-* Distribution/histograms of values in the attributes
-
-# ///////////////////////////////////////////////////////
-
-
 # Data Set 1: Twitter sentiment140
 
 Abstract: This is the sentiment140 dataset. It contains 1,600,000 tweets extracted using the twitter api . The tweets have been annotated (0 = negative, 4 = positive) and they can be used to detect sentiment. <sup>1</sup>
 
 Dataset Source <sup>1</sup> [twitter dataset](https://www.kaggle.com/kazanova/sentiment140) 
 
-https://www.kaggle.com/kazanova/sentiment140
 
 ## Explanation
 Since we were interested in doing text analysis in particular sentiment analysis and since this dataset has a very limited amount of features, while having lots of samples we dediced to take this data set. 
@@ -60,14 +43,6 @@ Since we were interested in doing text analysis in particular sentiment analysis
 ### How many samples: 
 
 Dataset has 1.600.000 tweets (samples) and 9 columns, one of them being the feature.
-
-#### Short description of the dataset columns
-* target: the polarity of the tweet (0 = negative, 2 = neutral, 4 = positive) [dtype = int64]
-* ids: The id of the tweet (2087) [dtype = int64]
-* date: the date of the tweet (Sat May 16 23:58:44 UTC 2009) [dtype = datetime]
-* flag: The query (lyx). If there is no query, then this value is NO_QUERY. [dtype = object]
-* user: the user that tweeted (max) [dtype = object]
-* text: the text of the tweet (this is a sample tweet) [dtype = object]
 
 ### How many attributes (features): 
 
@@ -80,31 +55,31 @@ So far we cleaned the tweets by applying some regex to handle URL's, references 
 Based on the method, tool and dictionary that we will use in the future we will end up having a fairly large amount of columns (features) each representing the quantity of a word that is contained in each tweet. If the positive amount of words will dominate then the tweet will be labeled with a positive sentiment.
 
 
-### What types of attributes (nominal, ordinal, interval, ...):
-
-* target: nominal 
-* ids: nominal
-* date: nominal
-* flag: nominal
-* user: nominal
-* text: nominal
+### Which data types:
 
 
-## Distribution/histograms of values in the attributes
-paste stuff from below
+* target: the polarity of the tweet (0 = negative, 2 = neutral, 4 = positive) [dtype = int64]
+    * nominal
+* ids: The id of the tweet (2087) [dtype = int64]
+    * ordinal
+* date: the date of the tweet (Sat May 16 23:58:44 UTC 2009) [dtype = datetime]
+    * ordinal
+* flag: The query (lyx). If there is no query, then this value is NO_QUERY. [dtype = object]
+    * nominal
+* user: the user that tweeted (max) [dtype = object]
+    * nominal
+* text: the text of the tweet (this is a sample tweet) [dtype = object]
+    * nominal
 
 
-## Load raw sentiment140.csv
 
 ```{python}
 dataset_path = 'datasets/sentiment/part-1-training.1600000.processed.noemoticon.csv.csv'
 DATASET_COLUMNS = ["target", "ids", "date", "flag", "user", "text"]
 
-df_raw = pd.read_csv(dataset_path, encoding ='latin_1' , names=DATASET_COLUMNS)
+#df_raw = pd.read_csv(dataset_path, encoding ='latin_1' , names=DATASET_COLUMNS)
 #df_raw.head()
 ```
-
-### Preprocess: extract day from date to sep col
 
 ```{python}
 def export_to_csv(df, file_name):
@@ -164,25 +139,10 @@ def preprocess(df):
 #export_to_csv(df_clean, './data/sentiment140_date_clean.csv')
 ```
 
-## Read Clean sentiment140
-
 ```{python}
 dataset_path = 'datasets/sentiment/sentiment140_date_clean.csv'
 df_clean = pd.read_csv(dataset_path, encoding='utf-8', header=0)
 df_clean['date'] = pd.to_datetime(df_clean['date'])
-df_clean.head()
-```
-
-## Column Data Types 
-
-```{python}
-print(df_clean.dtypes)
-```
-
-## Shape and Size
-
-```{python}
-print("Dataset has ", df_clean.shape[0], "rows and ", df_clean.shape[1], "columns.")
 ```
 
 ## Sentiment Distribution
@@ -197,7 +157,7 @@ target_cnt.reset_index(inplace=True)
 target_cnt.columns = ['SENTIMENT', 'COUNT']
 target_cnt.SENTIMENT = target_cnt.SENTIMENT.map({4:'pos', 2:'neu', 0:'neg'})
 
-plt.figure(figsize=(10,5))
+plt.figure(figsize=(5,4))
 plt.bar(target_cnt.SENTIMENT, target_cnt.COUNT)
 plt.title("distribution of sentiment labels")
 plt.xlabel("sentiment")
@@ -214,7 +174,7 @@ g = df_clean.groupby(by=df_clean.date.dt.day).agg('count')
 
 df_time_plot = pd.DataFrame({"day":g.index, "count":g.ids})
 
-plt.rcParams["figure.figsize"] = (18,6)
+plt.rcParams["figure.figsize"] = (18,5)
 ax = df_time_plot.plot.bar(x='day', y='count', rot=0)
 
 plt.xlabel("monthday")
@@ -235,7 +195,7 @@ df_weekday_plot.day = pd.Categorical(df_weekday_plot.day,
 df_weekday_plot.sort_values('day', inplace=True)
 df_weekday_plot
 
-plt.rcParams["figure.figsize"] = (18,6)
+plt.rcParams["figure.figsize"] = (18,5)
 ax = df_weekday_plot.plot.bar(x='day', y='count', rot=0)
 
 plt.xlabel("weekday")
@@ -250,7 +210,7 @@ Beside having the text as a feature vector we derived the wordcount as well as t
 
 ```{python}
 plt.figure(1)
-plt.figure(figsize=(18, 12))
+plt.figure(figsize=(15, 10))
 
 plt.subplot(221)
 plt.hist(df_clean.text_len, bins=400)
@@ -278,8 +238,6 @@ plt.boxplot(df_clean.text_wc, flierprops=green_diamond)
 plt.title("distribution of words per tweet (wordcount) [boxplot]")
 plt.ylabel("count")
 
-
-fig.tight_layout()
 plt.show()
 ```
 
@@ -287,7 +245,8 @@ plt.show()
 
 Abstract: "The OPPORTUNITY Dataset for Human Activity Recognition from Wearable, Object, and Ambient Sensors is a dataset devised to benchmark human activity recognition algorithms (classification, automatic data segmentation, sensor fusion, feature extraction, etc). <sup>1</sup>
 
-<sup>1</sup> https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#
+
+Dataset Source <sup>1</sup> [twitter dataset](https://archive.ics.uci.edu/ml/datasets/OPPORTUNITY+Activity+Recognition#) 
 
 
 ## Explanation
