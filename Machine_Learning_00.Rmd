@@ -7,7 +7,6 @@ jupyter:
       format_name: rmarkdown
       format_version: '1.0'
       jupytext_version: 1.0.5
-      jupytext_formats: ipynb,Rmd:rmarkdown
   kernelspec:
     display_name: Python 3
     language: python
@@ -15,12 +14,16 @@ jupyter:
 ---
 
 ```{python}
+# %autosave 0
+```
+
+```{python}
 import pandas as pd
 import numpy as np
 import os as os
 import matplotlib.pyplot as plt
 
-import regex as re
+import re
 import nltk
 ```
 
@@ -97,8 +100,8 @@ def preprocess(df):
     return df_new
     
 #df_clean = preprocess(df_raw)
-dataset_path = 'datasets/sentiment/sentiment140_date_clean.csv'
-export_to_csv(df_clean, './data/sentiment140_date_clean.csv')
+#dataset_path = 'datasets/sentiment/sentiment140_date_clean.csv'
+#export_to_csv(df_clean, './data/sentiment140_date_clean.csv')
 ```
 
 ## Read Clean sentiment140
@@ -201,10 +204,6 @@ plt.boxplot(df_clean.text_wc, flierprops=green_diamond) # plot pre_clean_len col
 plt.show()
 ```
 
-```{python}
-
-```
-
 # Data Set 1: OPPORTUNITY Activity Recognition Dataset
 
 Abstract: "The OPPORTUNITY Dataset for Human Activity Recognition from Wearable, Object, and Ambient Sensors is a dataset devised to benchmark human activity recognition algorithms (classification, automatic data segmentation, sensor fusion, feature extraction, etc). <sup>1</sup>
@@ -233,7 +232,7 @@ for line in opportunity_cols_txt:
             opportunity_cols[col_id]['value_type'] = re.search('value = (.*),',line).group(1)
             opportunity_cols[col_id]['unit'] = re.search('unit =(.*)$',line).group(1)
             
-opportunity_cols
+#opportunity_cols
 ```
 
 ```{python}
@@ -241,7 +240,7 @@ col_names = list()
 for key, column in opportunity_cols.items():
     col_names.append(key+"_"+column.get('name'))
 col_names.insert(0,'0_User')
-col_names
+#col_names
 ```
 
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 71}, colab_type=code, id=oqO1Zom-S0Qs, outputId=71f8505a-ca31-4b7a-fb03-1c2880a8a280}
@@ -267,15 +266,30 @@ print(df_opportunity_adl.shape)
 #df_adl = pd.read_csv('drive/My Drive/University/Data Science/Machine Learning/datasets/opportunity/S1-ADL1.dat', encoding='latin_1', header=None, sep='\s')
 ```
 
+```{python}
+#export_to_csv(df_opportunity_adl, "datasets/opportunity/opportunity_adl.csv")
+#export_to_csv(df_opportunity_drill, "datasets/opportunity/oppportunity_drill.csv")
+```
+
+```{python}
+df_opportunity_adl = pd.read_csv('datasets/opportunity/opportunity_adl.csv')
+df_opportunity_drill = pd.read_csv('datasets/opportunity/opportunity_drill.csv')
+```
+
+```{python}
+df_opportunity_adl.shape
+```
+
+```{python}
+df_opportunity_adl.head(10)
+```
+
 ```{python colab={}, colab_type=code, id=OoiEAWOMXp3E}
 df_opportunity_adl.columns = col_names
-#df_opportunity_drill.shape
 ```
 
 ```{python colab={'base_uri': 'https://localhost:8080/', 'height': 388}, colab_type=code, id=KIXW9NALTHHf, outputId=5bee476f-9eb9-4c0d-a859-97a1e8e75814}
-df_adl.head(10)
+df_opportunity_adl.head(10)
 ```
 
-```{python colab={}, colab_type=code, id=DXWlm6e7TI_s}
-
-```
+## Ich bin ein hübsches Markdown
