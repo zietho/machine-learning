@@ -278,5 +278,21 @@ df_adl.head(10)
 ```
 
 ```{python colab={}, colab_type=code, id=DXWlm6e7TI_s}
+dataset_path = 'datasets/opportunity/opportunity_drill.csv'
+df_clean = pd.read_csv(dataset_path, encoding='utf-8', header=0)
+df_clean.head()
+```
+
+```{python}
+dataset_path = 'datasets/opportunity/opportunity_adl.csv'
+df_clean = pd.read_csv(dataset_path, encoding='utf-8', header=0)
+df_clean.head()
+```
+
+```{python}
+df_clean.dtypes
+```
+
+```{python}
 
 ```
